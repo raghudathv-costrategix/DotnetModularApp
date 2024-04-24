@@ -4,13 +4,15 @@ namespace DotnetModularApp.Modules.User
 {
 	[ApiController]
 	[Route("api/users")]
-	public class UserController : ControllerBase
+	public class UserController(IUserService userService) : ControllerBase
 	{
+
+		private readonly IUserService userService = userService;
 
 		[HttpGet]
 		public ActionResult GetUser()
 		{
-			return Ok(new { UserId = 1 });
+			return userService.GetUser();
 		}
 	}
 }

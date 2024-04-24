@@ -4,6 +4,7 @@ namespace DotnetModularApp.Modules.Product
 	{
 		public IServiceCollection RegisterModule(IServiceCollection services)
 		{
+			services.AddScoped<IProductService, ProductService>();
 			return services;
 		}
 	}

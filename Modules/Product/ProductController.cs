@@ -4,13 +4,14 @@ namespace DotnetModularApp.Modules.Product
 {
 	[ApiController]
 	[Route("api/products")]
-	public class ProductController : ControllerBase
+	public class ProductController(IProductService productService) : ControllerBase
 	{
+		private readonly IProductService productService = productService;
 
 		[HttpGet]
-		public ActionResult GetProduct()
+		public JsonResult GetProduct()
 		{
-			return Ok(new { ProductId = 1 });
+			return productService.GetProduct();
 		}
 	}
 }

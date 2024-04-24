@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FBFxuwbyWxOjA+BrQ0FvR9LF0wrSKLEzaY+epOjKMPg=",
+  "Source": "DotnetModularApp",
+  "BasePath": "_content/DotnetModularApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

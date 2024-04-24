@@ -1,0 +1,6 @@
+@DotnetModularApp_HostAddress = http://localhost:5154
+
+GET {{DotnetModularApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

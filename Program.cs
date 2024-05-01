@@ -36,6 +36,7 @@ builder.Services.AddCors(options =>
 // WEB APPLICATION
 // -----------------
 var app = builder.Build();
+app.UseHttpsRedirection();
 
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
@@ -44,12 +45,15 @@ var app = builder.Build();
 // 	app.UseSwaggerUI();
 // }
 
-app.UseHttpsRedirection();
-
 // enable static files
-FileServerOptions fileServerOptions = new();
-fileServerOptions.StaticFileOptions.DefaultContentType = "text/plain";
-fileServerOptions.StaticFileOptions.ServeUnknownFileTypes = true;
+FileServerOptions fileServerOptions = new()
+{
+	StaticFileOptions = {
+		DefaultContentType = "text/plain",
+		ServeUnknownFileTypes = true,
+	}
+};
+
 app.UseFileServer(fileServerOptions);
 
 app.UseMiddleware<RoutePrefixMiddleware>();

@@ -1,48 +1,63 @@
+using System.Security.Claims;
+using System.Security.Principal;
+using DotnetModularApp.Middlewares;
 using DotnetModularApp.Modules;
 
+// -----------------
+// APPLICATION BUILDER
+// -----------------
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
 builder.Services.RegisterModules();
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<AuthenticationMiddleware>();
+builder.Services.AddTransient<RoutePrefixMiddleware>();
+builder.Services.AddTransient<ExceptionHandlerMiddleware>();
+builder.Services.AddTransient<RequestInterceptorMiddleware>();
+builder.Services.AddTransient<IPrincipal>(provider =>
+{
+	var user = provider.GetService<IHttpContextAccessor>()?.HttpContext?.User;
+	return user ?? new ClaimsPrincipal();
+});
+
+// cors
+var AllowedOrigins = "_AllowedOrigins";
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(name: AllowedOrigins, policy =>
+	{
+		policy.WithOrigins("*");
+	});
+});
+
+// -----------------
+// WEB APPLICATION
+// -----------------
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+// 	app.UseSwagger();
+// 	app.UseSwaggerUI();
+// }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-		"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// enable static files
+FileServerOptions fileServerOptions = new();
+fileServerOptions.StaticFileOptions.DefaultContentType = "text/plain";
+fileServerOptions.StaticFileOptions.ServeUnknownFileTypes = true;
+app.UseFileServer(fileServerOptions);
 
-app.MapGet("/weatherforecast", () =>
-{
-	var forecast = Enumerable.Range(1, 5).Select(index =>
-			new WeatherForecast
-			(
-					DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-					Random.Shared.Next(-20, 55),
-					summaries[Random.Shared.Next(summaries.Length)]
-			))
-			.ToArray();
-	return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+app.UseMiddleware<RoutePrefixMiddleware>();
+app.UsePathBase(new PathString("/api/v1"));
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<AuthenticationMiddleware>();
+app.UseMiddleware<RequestInterceptorMiddleware>();
+app.UseAuthorization();
 app.MapControllers();
+app.UseCors(AllowedOrigins);
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-	public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

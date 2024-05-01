@@ -1,6 +1,10 @@
-@DotnetModularApp_HostAddress = http://localhost:5154
+@baseUrl = http://localhost:5154/api/v1
 
-GET {{DotnetModularApp_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{baseUrl}}/products
+Content-Type: : application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
 ###
+
+GET {{baseUrl}}/users
+Content-Type: application/json

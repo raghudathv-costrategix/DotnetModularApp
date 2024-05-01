@@ -1,0 +1,26 @@
+<!doctype html> <!-- Important: must specify -->
+<html lang="en">
+
+<head>
+  <title>Document Management API</title>
+  <meta name="description" content="SwaggerUI" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="utf-8"> <!-- Important: rapi-doc uses utf8 characters -->
+  <script type="module" src="https://unpkg.com/rapidoc@9.3.4/dist/rapidoc-min.js"></script>
+  <script src="https://unpkg.com/rapipdf@2.2.1/dist/rapipdf-min.js"></script>
+</head>
+
+<body>
+  <rapi-doc spec-url="../openapi/apispec.yaml" theme="dark" show-header="false" bg-color="#222" text-color="#fff"
+    primary-color="#1E99D6" render-style="read" nav-text-color="#fff" default-schema-tab="example" persist-auth="true"
+    show-method-in-nav-bar="as-colored-block" font-size="large" nav-item-spacing="compact"
+    allow-spec-file-download="true">
+
+    <div slot="overview">
+      <p>Document Management API</p>
+      <rapi-pdf spec-url="../openapi/apispec.yaml" pdf-primary-color="#1E99D6" hide-input="true"></rapi-pdf>
+    </div>
+  </rapi-doc>
+</body>
+
+</html>

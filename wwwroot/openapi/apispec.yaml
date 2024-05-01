@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: DotnetModularApp
+  version: "1.0"
+servers:
+  - url: /api/v1
+tags:
+  - name: Product
+  - name: User
+paths:
+  /products:
+    get:
+      tags:
+        - Product
+      responses:
+        "200":
+          description: Success
+  /users:
+    get:
+      tags:
+        - User
+      responses:
+        "200":
+          description: Success
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+security:
+  - Bearer: []
